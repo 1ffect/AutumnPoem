@@ -188,6 +188,7 @@ const scenes = [
 const titleScreen = document.querySelector("#titleScreen");
 const hud = document.querySelector("#hud");
 const startButton = document.querySelector("#startButton");
+const continueButton = document.querySelector("#continueButton");
 const advanceArea = document.querySelector("#advanceArea");
 const backdrops = [document.querySelector("#backdropA"), document.querySelector("#backdropB")];
 const dialogue = document.querySelector("#dialogue");
@@ -219,6 +220,7 @@ let pageGain;
 let typingSoundTick = 0;
 let activeBackdrop = 0;
 let backdropTimer = 0;
+const progressKey = "autumn-poem-progress";
 
 backdrops[0].dataset.bg = "IMG_3106.jpg";
 backdrops[0].dataset.fit = "cover";
@@ -481,6 +483,7 @@ function finishTyping() {
 
 function renderScene() {
   const scene = scenes[index];
+  saveProgress();
   setBackground(scene.bg);
   speaker.textContent = scene.speaker;
   choices.innerHTML = "";
@@ -545,16 +548,45 @@ function restart() {
   window.clearTimeout(autoTimer);
   historyStack = [];
   index = 0;
+  saveProgress();
+  playPageSound();
+  renderScene();
+}
+
+function saveProgress() {
+  try {
+    window.localStorage.setItem(progressKey, String(index));
+  } catch {
+    // Progress saving is optional.
+  }
+}
+
+function loadProgress() {
+  try {
+    const saved = Number(window.localStorage.getItem(progressKey));
+    return Number.isInteger(saved) && saved >= 0 && saved < scenes.length ? saved : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function enterStory(startIndex) {
+  initAudio();
+  window.clearTimeout(autoTimer);
+  historyStack = [];
+  index = startIndex;
+  titleScreen.hidden = true;
+  hud.hidden = false;
   playPageSound();
   renderScene();
 }
 
 startButton.addEventListener("click", () => {
-  initAudio();
-  titleScreen.hidden = true;
-  hud.hidden = false;
-  playPageSound();
-  renderScene();
+  enterStory(0);
+});
+
+continueButton.addEventListener("click", () => {
+  enterStory(loadProgress());
 });
 
 advanceArea.addEventListener("click", advance);

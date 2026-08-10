@@ -145,7 +145,15 @@ h1 {
   line-height: 1.7;
 }
 
+.title-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
 .primary-button,
+.secondary-button,
 .choices button,
 .controls button {
   border: 1px solid var(--line);
@@ -167,7 +175,19 @@ h1 {
   backdrop-filter: blur(14px);
 }
 
+.secondary-button {
+  min-width: 122px;
+  min-height: 48px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: rgba(12, 11, 10, 0.34);
+  color: var(--muted);
+  font-size: 18px;
+  backdrop-filter: blur(14px);
+}
+
 .primary-button:hover,
+.secondary-button:hover,
 .choices button:hover,
 .controls button:hover {
   border-color: rgba(212, 165, 95, 0.85);
@@ -286,6 +306,11 @@ h1 {
   .title-screen {
     align-items: start;
     padding-top: 14vh;
+  }
+
+  .title-actions {
+    flex-direction: column;
+    align-items: center;
   }
 
   .dialogue {
