@@ -285,7 +285,7 @@ function initAudio() {
 
 function startBgm() {
   if (!bgmAudio) {
-    bgmAudio = new Audio("朝の冷えた空気.mp3");
+    bgmAudio = new Audio("bgm.mp3");
     bgmAudio.loop = true;
     bgmAudio.preload = "auto";
     bgmAudio.volume = soundOn ? 0.34 : 0;
