@@ -270,7 +270,7 @@ function initAudio() {
   masterGain.gain.value = soundOn ? 0.72 : 0;
   musicGain.gain.value = 0;
   windGain.gain.value = 0.055;
-  typeGain.gain.value = 0.45;
+  typeGain.gain.value = 0.55;
   pageGain.gain.value = 0.6;
 
   musicGain.connect(masterGain);
