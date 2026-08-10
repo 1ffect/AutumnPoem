@@ -210,6 +210,7 @@ let autoTimer = 0;
 let soundOn = true;
 let audioReady = false;
 let audioContext;
+let bgmAudio;
 let masterGain;
 let musicGain;
 let windGain;
@@ -246,6 +247,7 @@ function fadeParam(param, value, duration = 0.4) {
 function initAudio() {
   if (audioReady) {
     if (audioContext.state === "suspended") audioContext.resume();
+    startBgm();
     return;
   }
 
@@ -264,7 +266,7 @@ function initAudio() {
   pageGain = audioContext.createGain();
 
   masterGain.gain.value = soundOn ? 0.72 : 0;
-  musicGain.gain.value = 0.16;
+  musicGain.gain.value = 0;
   windGain.gain.value = 0.055;
   typeGain.gain.value = 0.5;
   pageGain.gain.value = 0.62;
@@ -275,10 +277,23 @@ function initAudio() {
   pageGain.connect(masterGain);
   masterGain.connect(audioContext.destination);
 
-  startMusic();
+  startBgm();
   startWind();
   audioReady = true;
   soundButton.classList.toggle("is-active", soundOn);
+}
+
+function startBgm() {
+  if (!bgmAudio) {
+    bgmAudio = new Audio("朝の冷えた空気.mp3");
+    bgmAudio.loop = true;
+    bgmAudio.preload = "auto";
+    bgmAudio.volume = soundOn ? 0.34 : 0;
+  }
+  bgmAudio.volume = soundOn ? 0.34 : 0;
+  bgmAudio.play().catch(() => {
+    // Browser audio policies can reject playback outside a direct click.
+  });
 }
 
 function startMusic() {
@@ -400,6 +415,7 @@ function setSound(enabled) {
   soundButton.classList.toggle("is-active", soundOn);
   soundButton.textContent = soundOn ? "声" : "静";
   if (masterGain) fadeParam(masterGain.gain, soundOn ? 0.72 : 0, 0.22);
+  if (bgmAudio) bgmAudio.volume = soundOn ? 0.34 : 0;
 }
 
 function setBackground(src) {
