@@ -268,8 +268,8 @@ function initAudio() {
   masterGain.gain.value = soundOn ? 0.72 : 0;
   musicGain.gain.value = 0;
   windGain.gain.value = 0.055;
-  typeGain.gain.value = 0.24;
-  pageGain.gain.value = 0.36;
+  typeGain.gain.value = 0.38;
+  pageGain.gain.value = 0.5;
 
   musicGain.connect(masterGain);
   windGain.connect(masterGain);
@@ -288,9 +288,9 @@ function startBgm() {
     bgmAudio = new Audio("bgm.mp3?v=20260810");
     bgmAudio.loop = true;
     bgmAudio.preload = "auto";
-    bgmAudio.volume = soundOn ? 0.34 : 0;
+    bgmAudio.volume = soundOn ? 0.28 : 0;
   }
-  bgmAudio.volume = soundOn ? 0.34 : 0;
+  bgmAudio.volume = soundOn ? 0.28 : 0;
   bgmAudio.play().catch(() => {
     // Browser audio policies can reject playback outside a direct click.
   });
@@ -349,30 +349,30 @@ function playTypeSound() {
   const click = audioContext.createBufferSource();
   const clickFilter = audioContext.createBiquadFilter();
   const clickGain = audioContext.createGain();
-  click.buffer = createNoiseBuffer(audioContext, 0.04);
+  click.buffer = createNoiseBuffer(audioContext, 0.045);
   clickFilter.type = "bandpass";
   clickFilter.frequency.value = 1500 + Math.random() * 360;
   clickFilter.Q.value = 2.4;
   clickGain.gain.setValueAtTime(0.0001, now);
-  clickGain.gain.exponentialRampToValueAtTime(0.075, now + 0.004);
-  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.038);
+  clickGain.gain.exponentialRampToValueAtTime(0.12, now + 0.004);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.042);
   click.connect(clickFilter);
   clickFilter.connect(clickGain);
   clickGain.connect(typeGain);
   click.start(now);
-  click.stop(now + 0.04);
+  click.stop(now + 0.045);
 
   const gain = audioContext.createGain();
   const oscillator = audioContext.createOscillator();
   oscillator.type = "triangle";
   oscillator.frequency.value = 660 + Math.random() * 90;
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.018, now + 0.004);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+  gain.gain.exponentialRampToValueAtTime(0.028, now + 0.004);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
   oscillator.connect(gain);
   gain.connect(typeGain);
   oscillator.start(now);
-  oscillator.stop(now + 0.038);
+  oscillator.stop(now + 0.043);
 }
 
 function playPageSound() {
@@ -387,8 +387,8 @@ function playPageSound() {
   paperFilter.frequency.exponentialRampToValueAtTime(2300, now + 0.18);
   paperFilter.Q.value = 0.75;
   paperGain.gain.setValueAtTime(0.0001, now);
-  paperGain.gain.exponentialRampToValueAtTime(0.16, now + 0.018);
-  paperGain.gain.exponentialRampToValueAtTime(0.035, now + 0.13);
+  paperGain.gain.exponentialRampToValueAtTime(0.24, now + 0.018);
+  paperGain.gain.exponentialRampToValueAtTime(0.055, now + 0.13);
   paperGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.27);
   paper.connect(paperFilter);
   paperFilter.connect(paperGain);
@@ -402,7 +402,7 @@ function playPageSound() {
   confirm.frequency.setValueAtTime(420, now);
   confirm.frequency.exponentialRampToValueAtTime(520, now + 0.06);
   confirmGain.gain.setValueAtTime(0.0001, now);
-  confirmGain.gain.exponentialRampToValueAtTime(0.035, now + 0.014);
+  confirmGain.gain.exponentialRampToValueAtTime(0.065, now + 0.014);
   confirmGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
   confirm.connect(confirmGain);
   confirmGain.connect(pageGain);
@@ -415,7 +415,7 @@ function setSound(enabled) {
   soundButton.classList.toggle("is-active", soundOn);
   soundButton.textContent = soundOn ? "声" : "静";
   if (masterGain) fadeParam(masterGain.gain, soundOn ? 0.72 : 0, 0.22);
-  if (bgmAudio) bgmAudio.volume = soundOn ? 0.34 : 0;
+  if (bgmAudio) bgmAudio.volume = soundOn ? 0.28 : 0;
 }
 
 function setBackground(src) {
