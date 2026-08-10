@@ -285,7 +285,7 @@ function initAudio() {
 
 function startBgm() {
   if (!bgmAudio) {
-    bgmAudio = new Audio("bgm.mp3");
+    bgmAudio = new Audio("bgm.mp3?v=20260810");
     bgmAudio.loop = true;
     bgmAudio.preload = "auto";
     bgmAudio.volume = soundOn ? 0.34 : 0;
