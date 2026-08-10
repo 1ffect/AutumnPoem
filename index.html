@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>秋词 - AVG Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="novel" aria-label="秋词视觉小说演示">
+      <div class="backdrop-layer is-visible" id="backdropA"></div>
+      <div class="backdrop-layer" id="backdropB"></div>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+
+      <section class="title-screen" id="titleScreen">
+        <div class="title-copy">
+          <p class="kicker">短篇 AVG Demo</p>
+          <h1>秋词</h1>
+          <p class="subtitle">风起时，少年把心事讲给秋天听。</p>
+          <button class="primary-button" id="startButton" type="button">开始</button>
+        </div>
+      </section>
+
+      <section class="hud" id="hud" hidden>
+        <button class="hotspot" id="advanceArea" type="button" aria-label="推进文字"></button>
+
+        <div class="dialogue" id="dialogue">
+          <div class="speaker" id="speaker">旁白</div>
+          <p class="line" id="line"></p>
+          <div class="choices" id="choices"></div>
+          <div class="hint" id="hint">点击画面继续</div>
+        </div>
+
+        <div class="controls" aria-label="控制">
+          <button id="backButton" type="button" title="上一句">←</button>
+          <button id="soundButton" type="button" title="声音开关">声</button>
+          <button id="autoButton" type="button" title="自动播放">Auto</button>
+          <button id="restartButton" type="button" title="重新开始">↺</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
