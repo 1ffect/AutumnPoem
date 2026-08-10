@@ -265,9 +265,9 @@ function initAudio() {
 
   masterGain.gain.value = soundOn ? 0.72 : 0;
   musicGain.gain.value = 0.16;
-  windGain.gain.value = 0.13;
-  typeGain.gain.value = 0.14;
-  pageGain.gain.value = 0.34;
+  windGain.gain.value = 0.055;
+  typeGain.gain.value = 0.5;
+  pageGain.gain.value = 0.62;
 
   musicGain.connect(masterGain);
   windGain.connect(masterGain);
@@ -330,35 +330,34 @@ function startWind() {
 function playTypeSound() {
   if (!audioReady || !soundOn) return;
   typingSoundTick += 1;
-  if (typingSoundTick % 3 === 0) return;
   const now = audioContext.currentTime;
   const click = audioContext.createBufferSource();
   const clickFilter = audioContext.createBiquadFilter();
   const clickGain = audioContext.createGain();
-  click.buffer = createNoiseBuffer(audioContext, 0.035);
-  clickFilter.type = "bandpass";
-  clickFilter.frequency.value = 1700 + Math.random() * 700;
-  clickFilter.Q.value = 6;
+  click.buffer = createNoiseBuffer(audioContext, 0.055);
+  clickFilter.type = "highpass";
+  clickFilter.frequency.value = 1300 + Math.random() * 450;
+  clickFilter.Q.value = 1.8;
   clickGain.gain.setValueAtTime(0.0001, now);
-  clickGain.gain.exponentialRampToValueAtTime(0.055, now + 0.004);
-  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
+  clickGain.gain.exponentialRampToValueAtTime(0.16, now + 0.003);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
   click.connect(clickFilter);
   clickFilter.connect(clickGain);
   clickGain.connect(typeGain);
   click.start(now);
-  click.stop(now + 0.035);
+  click.stop(now + 0.055);
 
   const gain = audioContext.createGain();
   const oscillator = audioContext.createOscillator();
-  oscillator.type = "triangle";
-  oscillator.frequency.value = 880 + Math.random() * 140;
+  oscillator.type = "square";
+  oscillator.frequency.value = 760 + Math.random() * 110;
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.018, now + 0.004);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.032);
+  gain.gain.exponentialRampToValueAtTime(0.045, now + 0.003);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
   oscillator.connect(gain);
   gain.connect(typeGain);
   oscillator.start(now);
-  oscillator.stop(now + 0.035);
+  oscillator.stop(now + 0.05);
 }
 
 function playPageSound() {
@@ -367,29 +366,29 @@ function playPageSound() {
   const paper = audioContext.createBufferSource();
   const paperFilter = audioContext.createBiquadFilter();
   const paperGain = audioContext.createGain();
-  paper.buffer = createNoiseBuffer(audioContext, 0.24);
+  paper.buffer = createNoiseBuffer(audioContext, 0.3);
   paperFilter.type = "bandpass";
-  paperFilter.frequency.setValueAtTime(1250, now);
-  paperFilter.frequency.exponentialRampToValueAtTime(2600, now + 0.16);
-  paperFilter.Q.value = 0.85;
+  paperFilter.frequency.setValueAtTime(850, now);
+  paperFilter.frequency.exponentialRampToValueAtTime(3100, now + 0.2);
+  paperFilter.Q.value = 1.1;
   paperGain.gain.setValueAtTime(0.0001, now);
-  paperGain.gain.exponentialRampToValueAtTime(0.18, now + 0.018);
-  paperGain.gain.exponentialRampToValueAtTime(0.035, now + 0.09);
-  paperGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.23);
+  paperGain.gain.exponentialRampToValueAtTime(0.36, now + 0.014);
+  paperGain.gain.exponentialRampToValueAtTime(0.08, now + 0.12);
+  paperGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.29);
   paper.connect(paperFilter);
   paperFilter.connect(paperGain);
   paperGain.connect(pageGain);
   paper.start(now);
-  paper.stop(now + 0.24);
+  paper.stop(now + 0.3);
 
   const confirm = audioContext.createOscillator();
   const confirmGain = audioContext.createGain();
-  confirm.type = "sine";
-  confirm.frequency.setValueAtTime(520, now);
-  confirm.frequency.exponentialRampToValueAtTime(690, now + 0.055);
+  confirm.type = "triangle";
+  confirm.frequency.setValueAtTime(380, now);
+  confirm.frequency.exponentialRampToValueAtTime(640, now + 0.075);
   confirmGain.gain.setValueAtTime(0.0001, now);
-  confirmGain.gain.exponentialRampToValueAtTime(0.055, now + 0.012);
-  confirmGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.085);
+  confirmGain.gain.exponentialRampToValueAtTime(0.18, now + 0.01);
+  confirmGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
   confirm.connect(confirmGain);
   confirmGain.connect(pageGain);
   confirm.start(now);
@@ -494,6 +493,7 @@ function advance() {
   window.clearTimeout(autoTimer);
   if (isTyping) {
     finishTyping();
+    playPageSound();
     return;
   }
 
