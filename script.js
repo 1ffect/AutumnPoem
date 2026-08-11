@@ -425,7 +425,7 @@ function setBackground(src) {
   const fit = scene.fit || "cover";
   const isInset = fit !== "cover";
   const size = fit === "portraitClose" ? "auto 140vh" : fit === "portrait" ? "auto 125vh" : fit === "portraitSmall" ? "auto 150vh" : fit === "framed" ? "auto 80vh" : "cover";
-  const position = fit === "portraitClose" ? "center -5vh" : fit === "portrait" ? "center -2vh" : fit === "portraitSmall" ? "center -6vh" : fit === "framed" ? "center 2vh" : "center";
+  const position = fit === "portraitClose" ? "center -7vh" : fit === "portrait" ? "center -4vh" : fit === "portraitSmall" ? "center -9vh" : fit === "framed" ? "center 2vh" : "center";
   const current = backdrops[activeBackdrop];
   if (current.dataset.bg === src && current.dataset.fit === fit) return;
 
