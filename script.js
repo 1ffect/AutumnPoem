@@ -221,14 +221,10 @@ let typingSoundTick = 0;
 let activeBackdrop = 0;
 let backdropTimer = 0;
 const progressKey = "autumn-poem-progress";
+const preloadedAssets = new Set();
 
 backdrops[0].dataset.bg = "IMG_3106.jpg";
 backdrops[0].dataset.fit = "cover";
-
-for (const src of [...new Set(scenes.map((scene) => scene.bg))]) {
-  const image = new Image();
-  image.src = src;
-}
 
 function createNoiseBuffer(context, seconds = 2) {
   const buffer = context.createBuffer(1, context.sampleRate * seconds, context.sampleRate);
@@ -289,7 +285,7 @@ function startBgm() {
   if (!bgmAudio) {
     bgmAudio = new Audio("bgm.mp3?v=20260810");
     bgmAudio.loop = true;
-    bgmAudio.preload = "auto";
+    bgmAudio.preload = "none";
     bgmAudio.volume = soundOn ? 0.28 : 0;
   }
   bgmAudio.volume = soundOn ? 0.28 : 0;
@@ -456,6 +452,17 @@ function setBackground(src) {
   }, 1180);
 }
 
+function preloadSceneAssets(startIndex, count = 3) {
+  for (let offset = 1; offset <= count; offset += 1) {
+    const scene = scenes[startIndex + offset];
+    if (!scene || preloadedAssets.has(scene.bg)) continue;
+    preloadedAssets.add(scene.bg);
+    const image = new Image();
+    image.decoding = "async";
+    image.src = scene.bg;
+  }
+}
+
 function typeLine(text) {
   window.clearInterval(typingTimer);
   typedText = text;
@@ -485,6 +492,7 @@ function renderScene() {
   const scene = scenes[index];
   saveProgress();
   setBackground(scene.bg);
+  preloadSceneAssets(index);
   speaker.textContent = scene.speaker;
   choices.innerHTML = "";
   hint.textContent = scene.choices ? "选择一句回应" : index === scenes.length - 1 ? "故事结束 · 点击回到开头" : "点击画面继续";
