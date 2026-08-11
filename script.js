@@ -222,9 +222,12 @@ let activeBackdrop = 0;
 let backdropTimer = 0;
 const progressKey = "autumn-poem-progress";
 const preloadedAssets = new Set();
+const bgmUrl = "bgm-lite.mp3?v=20260811a";
 
 backdrops[0].dataset.bg = "IMG_3106.jpg";
 backdrops[0].dataset.fit = "cover";
+
+prepareBgm();
 
 function createNoiseBuffer(context, seconds = 2) {
   const buffer = context.createBuffer(1, context.sampleRate * seconds, context.sampleRate);
@@ -282,16 +285,21 @@ function initAudio() {
 }
 
 function startBgm() {
-  if (!bgmAudio) {
-    bgmAudio = new Audio("bgm.mp3?v=20260810");
-    bgmAudio.loop = true;
-    bgmAudio.preload = "none";
-    bgmAudio.volume = soundOn ? 0.28 : 0;
-  }
+  prepareBgm();
   bgmAudio.volume = soundOn ? 0.28 : 0;
   bgmAudio.play().catch(() => {
     // Browser audio policies can reject playback outside a direct click.
   });
+}
+
+function prepareBgm() {
+  if (!bgmAudio) {
+    bgmAudio = new Audio(bgmUrl);
+    bgmAudio.loop = true;
+    bgmAudio.preload = "auto";
+    bgmAudio.volume = soundOn ? 0.28 : 0;
+    bgmAudio.load();
+  }
 }
 
 function startMusic() {

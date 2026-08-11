@@ -2,6 +2,7 @@
 Thumbs.db
 *.log
 *.docx
+bgm.mp3
 .env
 .env.*
 !.env.example
