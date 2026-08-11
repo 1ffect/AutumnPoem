@@ -222,7 +222,7 @@ let activeBackdrop = 0;
 let backdropTimer = 0;
 const progressKey = "autumn-poem-progress";
 const preloadedAssets = new Set();
-const bgmUrl = "bgm-lite.mp3?v=20260811a";
+const bgmUrl = "bgm-lite.mp3?v=20260811b";
 
 backdrops[0].dataset.bg = "IMG_3106.jpg";
 backdrops[0].dataset.fit = "cover";
@@ -285,6 +285,10 @@ function initAudio() {
 }
 
 function startBgm() {
+  primeBgmPlayback();
+}
+
+function primeBgmPlayback() {
   prepareBgm();
   bgmAudio.volume = soundOn ? 0.28 : 0;
   bgmAudio.play().catch(() => {
@@ -294,7 +298,8 @@ function startBgm() {
 
 function prepareBgm() {
   if (!bgmAudio) {
-    bgmAudio = new Audio(bgmUrl);
+    bgmAudio = document.querySelector("#bgmAudio") || new Audio(bgmUrl);
+    if (!bgmAudio.src) bgmAudio.src = bgmUrl;
     bgmAudio.loop = true;
     bgmAudio.preload = "auto";
     bgmAudio.volume = soundOn ? 0.28 : 0;
@@ -605,6 +610,9 @@ continueButton.addEventListener("click", () => {
   enterStory(loadProgress());
 });
 
+startButton.addEventListener("pointerdown", primeBgmPlayback);
+continueButton.addEventListener("pointerdown", primeBgmPlayback);
+
 advanceArea.addEventListener("click", advance);
 backButton.addEventListener("click", goBack);
 soundButton.addEventListener("click", () => {
@@ -623,6 +631,7 @@ window.addEventListener("keydown", (event) => {
   if (event.key === " " || event.key === "Enter") {
     event.preventDefault();
     if (!titleScreen.hidden) {
+      primeBgmPlayback();
       startButton.click();
     } else {
       advance();
